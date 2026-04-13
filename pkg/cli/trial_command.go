@@ -4,8 +4,11 @@ import (
 	"fmt"
 
 	"github.com/github/gh-aw/pkg/constants"
+	"github.com/github/gh-aw/pkg/logger"
 	"github.com/spf13/cobra"
 )
+
+var trialCommandLog = logger.New("cli:trial_command")
 
 // NewTrialCommand creates the trial command
 func NewTrialCommand(validateEngine func(string) error) *cobra.Command {
@@ -88,6 +91,8 @@ Trial results are saved both locally (in trials/ directory) and in the host repo
 			if repoSpec != "" {
 				hostRepoSpec = repoSpec
 			}
+
+			trialCommandLog.Printf("Running trial: specs=%v, hostRepo=%q, logicalRepo=%q, dryRun=%v, timeout=%d, repeat=%d", workflowSpecs, hostRepoSpec, logicalRepoSpec, dryRun, timeout, repeatCount)
 
 			opts := TrialOptions{
 				Repos: RepoConfig{
