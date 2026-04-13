@@ -13,14 +13,18 @@ import (
 	"time"
 
 	"github.com/github/gh-aw/pkg/console"
+	"github.com/github/gh-aw/pkg/logger"
 	"github.com/github/gh-aw/pkg/sliceutil"
 )
+
+var gatewayLogsRenderLog = logger.New("cli:gateway_logs_render")
 
 // renderGatewayMetricsTable renders gateway metrics as a console table
 func renderGatewayMetricsTable(metrics *GatewayMetrics, verbose bool) string {
 	if metrics == nil || len(metrics.Servers) == 0 {
 		return ""
 	}
+	gatewayLogsRenderLog.Printf("Rendering gateway metrics: servers=%d, totalRequests=%d, verbose=%v", len(metrics.Servers), metrics.TotalRequests, verbose)
 
 	var output strings.Builder
 
@@ -193,6 +197,7 @@ func getSortedServerNames(metrics *GatewayMetrics) []string {
 
 // displayAggregatedGatewayMetrics aggregates and displays gateway metrics across all processed runs
 func displayAggregatedGatewayMetrics(processedRuns []ProcessedRun, outputDir string, verbose bool) {
+	gatewayLogsRenderLog.Printf("Aggregating gateway metrics from %d processed runs", len(processedRuns))
 	// Aggregate gateway metrics from all runs
 	aggregated := &GatewayMetrics{
 		Servers: make(map[string]*GatewayServerMetrics),
@@ -264,8 +269,10 @@ func displayAggregatedGatewayMetrics(processedRuns []ProcessedRun, outputDir str
 
 	// Only display if we found gateway metrics
 	if runCount == 0 || len(aggregated.Servers) == 0 {
+		gatewayLogsRenderLog.Printf("No gateway metrics to display: runsWithMetrics=%d, servers=%d", runCount, len(aggregated.Servers))
 		return
 	}
+	gatewayLogsRenderLog.Printf("Aggregated gateway metrics: runsWithMetrics=%d, servers=%d, totalRequests=%d", runCount, len(aggregated.Servers), aggregated.TotalRequests)
 
 	// Recalculate averages for aggregated data
 	calculateGatewayAggregates(aggregated)
