@@ -362,7 +362,7 @@ This implementation provides a solid foundation for guard policies in the MCP ga
 - **Type-safe**: Strongly-typed structs with validation
 - **Extensible**: New servers and policy types can be added without structural changes
 - **Consistent syntax**: Follows existing frontmatter conventions
-- **Well-validated**: Comprehensive validation with clear error messages
+- **Well-validated**: Validation with clear error messages
 - **Forward-compatible**: Supports future enhancements
 
 The implementation follows established patterns in the codebase and integrates with the existing compilation and validation infrastructure.
