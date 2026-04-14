@@ -252,8 +252,6 @@ Custom weights are embedded in the compiled workflow YAML and read by `gh aw log
 
 ## Timeout Configuration
 
-Repositories with long build or test cycles require careful timeout tuning at multiple levels. This section documents the timeout knobs available for each engine.
-
 ### Job-Level Timeout (`timeout-minutes`)
 
 `timeout-minutes` sets the maximum wall-clock time for the entire agent job. This is the primary knob for repositories with long build times. The default is 20 minutes.
@@ -310,25 +308,13 @@ timeout-minutes: 60
 
 The `CLAUDE_CODE_MAX_TURNS` environment variable is a Claude Code CLI equivalent of `max-turns`. When `max-turns` is set in frontmatter, gh-aw passes it to the Claude CLI automatically — you do not need to set this env var separately.
 
-#### Codex
+#### Codex and Gemini
 
-Codex does not support `max-turns`. Use `tools.timeout` and `timeout-minutes` to control execution budgets:
-
-```yaml wrap
-engine:
-  id: codex
-tools:
-  timeout: 300         # 5 minutes per tool call
-timeout-minutes: 60
-```
-
-#### Gemini
-
-Gemini does not support `max-turns` or `max-continuations`. Use `timeout-minutes` and `tools.timeout` to bound execution:
+Neither engine supports `max-turns` or `max-continuations`. Use `timeout-minutes` and `tools.timeout` to bound execution:
 
 ```yaml wrap
 engine:
-  id: gemini
+  id: codex   # or gemini
 tools:
   timeout: 300
 timeout-minutes: 60
