@@ -5,17 +5,11 @@ sidebar:
   badge: { text: 'Manual', variant: 'tip' }
 ---
 
-DispatchOps enables manual workflow execution via the GitHub Actions UI or CLI, perfect for on-demand tasks, testing, and workflows that need human judgment about timing. The `workflow_dispatch` trigger lets you run workflows with custom inputs whenever needed.
+DispatchOps enables manual workflow execution via the GitHub Actions UI or CLI. Use it for research tasks, operational commands, testing, debugging, or any task that doesn't fit a schedule or event trigger.
 
-Use DispatchOps for research tasks, operational commands, testing workflows during development, debugging production issues, or any task that doesn't fit a schedule or event trigger.
+## Trigger Configuration
 
-## How Workflow Dispatch Works
-
-Workflows with `workflow_dispatch` can be triggered manually rather than waiting for events like issues, pull requests, or schedules.
-
-### Basic Syntax
-
-Add `workflow_dispatch:` to the `on:` section in your workflow frontmatter:
+Add `workflow_dispatch:` to your frontmatter, optionally with inputs:
 
 ```yaml
 on:
@@ -23,8 +17,6 @@ on:
 ```
 
 ### With Input Parameters
-
-Define inputs to customize workflow behavior at runtime:
 
 ```yaml
 on:
@@ -50,40 +42,22 @@ on:
         default: staging
 ```
 
-Supported input types: `string` (text), `boolean` (checkbox), `choice` (dropdown), `environment` (GitHub environments dropdown).
+Supported input types: `string` (text), `boolean` (checkbox), `choice` (dropdown), `environment` (GitHub environments dropdown). The `environment` type auto-populates from repository Settings → Environments; it does not enforce protection rules — use `manual-approval:` for approval gates.
 
-### Environment Input Type
+## Security
 
-The `environment` type auto-populates from repository Settings → Environments, returning the selected name as a string. No `options` list is needed; specify a `default` matching an existing environment name. The type does not enforce protection rules — use `manual-approval:` for approval gates (see [Environment Approval Gates](#environment-approval-gates)).
-
-## Security Model
-
-### Permission Requirements
-
-Manual workflow execution respects the same security model as other triggers:
-
-- **Repository permissions** - User must have write access or higher to trigger workflows
-- **Role-based access** - Use the `roles:` field to restrict who can run workflows:
+Triggering requires write access or higher. Restrict access with `roles:` or `bots:` fields:
 
 ```yaml
 on:
   workflow_dispatch:
 roles: [admin, maintainer]
+bots: ["dependabot[bot]"]
 ```
 
-- **Bot authorization** - Use the `bots:` field to allow specific bot accounts:
+Forks cannot trigger workflows in the parent repository — `workflow_dispatch` only executes in the repository where it's defined.
 
-```yaml
-on:
-  workflow_dispatch:
-bots: ["dependabot[bot]", "github-actions[bot]"]
-```
-
-### Fork Protection
-
-Unlike issue/PR triggers, `workflow_dispatch` only executes in the repository where it's defined-forks cannot trigger workflows in the parent repository. This provides inherent protection against fork-based attacks.
-
-### Environment Approval Gates
+### Approval Gates
 
 Require manual approval before execution using GitHub environment protection rules:
 
@@ -93,56 +67,24 @@ on:
 manual-approval: production
 ```
 
-Configure approval rules, required reviewers, and wait timers in repository Settings → Environments. See [GitHub's environment documentation](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) for setup details.
+Configure reviewers and wait timers in repository Settings → Environments. See [GitHub's environment documentation](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment).
 
-## Running Workflows from GitHub.com
+## Running Workflows
 
-### Via Actions Tab
+**From GitHub.com:** Go to the **Actions** tab, select the workflow, click **Run workflow**, fill in inputs, and confirm. Only workflows with `workflow_dispatch:` in their `on:` section appear — if yours is missing, verify it has been compiled and the `.lock.yml` pushed.
 
-Go to the **Actions** tab, select the workflow from the sidebar, click **Run workflow**, fill in any inputs, and confirm. Only workflows with `workflow_dispatch:` in their `on:` section appear in the dropdown — if yours is missing, verify it has been compiled and the `.lock.yml` pushed to the repository.
-
-## Running Workflows with CLI
-
-The `gh aw run` command provides a faster way to trigger workflows from the command line.
-
-### Basic Usage
-
-```bash
-gh aw run workflow
-```
-
-This matches workflows by filename prefix, validates `workflow_dispatch:`, and returns the run URL immediately.
-
-### With Input Parameters
-
-Pass inputs using the `--raw-field` or `-f` flag in `key=value` format:
+**From the CLI:** Use `gh aw run`, which matches by filename prefix and returns the run URL immediately:
 
 ```bash
 gh aw run research --raw-field topic="quantum computing"
-```
 
-```bash
 gh aw run scout \
   --raw-field topic="AI safety research" \
-  --raw-field priority=high
-```
+  --raw-field priority=high \
+  --wait                         # Monitor and exit with success/failure code
 
-### Wait for Completion
-
-Monitor workflow execution and wait for results:
-
-```bash
-gh aw run research --raw-field topic="AI agents" --wait
-```
-
-`--wait` monitors progress in real-time and exits with a success/failure code on completion.
-
-### Additional Options
-
-```bash
-gh aw run research --ref feature-branch              # Run from specific branch
-gh aw run workflow --repo owner/repository           # Run in another repository
-gh aw run research --raw-field topic="AI" --verbose  # Verbose output
+gh aw run research --ref feature-branch    # Run from a specific branch
+gh aw run workflow --repo owner/repository # Run in another repository
 ```
 
 ## Declaring and Referencing Inputs
@@ -182,11 +124,7 @@ Analysis depth requested: ${{ github.event.inputs.depth }}
 Provide a ${{ github.event.inputs.depth }} analysis with key findings and recommendations.
 ```
 
-Reference inputs with `${{ github.event.inputs.INPUT_NAME }}`—values are interpolated at compile time throughout the workflow.
-
-### Conditional Logic Based on Inputs
-
-Use Handlebars conditionals to change behavior based on input values:
+Reference inputs with `${{ github.event.inputs.INPUT_NAME }}`. Use Handlebars conditionals to change behavior based on input values:
 
 ```markdown
 {{#if (eq github.event.inputs.include_code "true")}}
@@ -200,11 +138,9 @@ URGENT: Prioritize speed over completeness.
 {{/if}}
 ```
 
-## Development Pattern: Branch Testing
+## Branch Testing
 
-### Testing Workflow Changes
-
-Add `workflow_dispatch:` to feature branches for testing before merging. Use [trial mode](/gh-aw/patterns/trial-ops/) for isolated testing without affecting the production repository, or run from a branch directly:
+Add `workflow_dispatch:` to feature branches for testing before merging:
 
 ```bash
 gh aw trial ./research.md --raw-field topic="test query"  # isolated, no side effects
@@ -223,17 +159,14 @@ gh aw run research --ref feature/improve-workflow          # runs against live r
 
 ## Troubleshooting
 
-**Workflow not listed in GitHub UI:** Verify `workflow_dispatch:` exists in the `on:` section, compile the workflow (`gh aw compile workflow`), and push both `.md` and `.lock.yml` files. The Actions page may need a refresh.
-
-**"Workflow not found" error:** Use the filename without `.md` extension (`research` not `research.md`). Ensure the workflow exists in `.github/workflows/` and has been compiled.
-
-**"Workflow cannot be run" error:** Add `workflow_dispatch:` to the `on:` section, recompile, and verify the `.lock.yml` includes the trigger before pushing.
-
-**Permission denied:** Verify write access to the repository and check the `roles:` field in workflow frontmatter. For organization repos, confirm your org role.
-
-**Inputs not appearing:** Check YAML syntax and indentation (2 spaces) in `workflow_dispatch.inputs`. Ensure input types are valid (`string`, `boolean`, `choice`, `environment`), then recompile and push.
-
-**Wrong branch context:** Specify the branch explicitly with `--ref branch-name` in CLI or select the correct branch in the GitHub UI dropdown before running.
+| Symptom | Fix |
+|---------|-----|
+| Workflow not listed in GitHub UI | Verify `workflow_dispatch:` is in `on:`, compile (`gh aw compile workflow`), and push both `.md` and `.lock.yml` |
+| "Workflow not found" | Use the filename without `.md` extension (e.g. `research` not `research.md`) |
+| "Workflow cannot be run" | Add `workflow_dispatch:` to `on:`, recompile, verify `.lock.yml` includes the trigger |
+| Permission denied | Verify write access; check the `roles:` field in frontmatter |
+| Inputs not appearing | Check YAML indentation (2 spaces) and that input types are valid, then recompile |
+| Wrong branch context | Use `--ref branch-name` in CLI, or select the branch in the GitHub UI dropdown |
 
 ## Related Documentation
 
