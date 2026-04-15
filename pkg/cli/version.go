@@ -1,6 +1,11 @@
 package cli
 
-import "github.com/github/gh-aw/pkg/workflow"
+import (
+	"github.com/github/gh-aw/pkg/logger"
+	"github.com/github/gh-aw/pkg/workflow"
+)
+
+var versionLog = logger.New("cli:version")
 
 // Package-level version information
 var (
@@ -14,11 +19,13 @@ func init() {
 
 // SetVersionInfo sets the version information for the CLI and workflow package
 func SetVersionInfo(v string) {
+	versionLog.Printf("SetVersionInfo: setting version to %q", v)
 	version = v
 	workflow.SetVersion(v) // Keep workflow package in sync
 }
 
 // GetVersion returns the current version
 func GetVersion() string {
+	versionLog.Printf("GetVersion: returning %q", version)
 	return version
 }
