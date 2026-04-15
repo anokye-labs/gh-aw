@@ -64,6 +64,7 @@ gh aw compile --actionlint  # Includes shellcheck
 gh aw compile --zizmor      # Security vulnerability scanner
 gh aw compile --poutine     # Supply chain security analyzer
 gh aw compile --runner-guard  # Runner constraint scanner (requires Docker)
+gh aw compile --validate-images  # Validate Docker container images (opt-in, requires Docker)
 
 # Strict mode with all scanners
 gh aw compile --actionlint --zizmor --poutine --runner-guard
@@ -2117,6 +2118,8 @@ Import files are in `.github/workflows/shared/` and can contain:
 - Safe-outputs configurations
 - Text content
 - Mixed frontmatter + content
+- Environment variables (`env:`) — main workflow vars take precedence over imported values
+- Checkout configuration (`checkout:`) — imported entries are appended to the main workflow's checkout entries
 
 Example import file with tools:
 
