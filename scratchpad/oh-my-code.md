@@ -1128,20 +1128,20 @@ gh aw logs --metrics
 
 ### 10.2 Use Case Suitability
 
-| Use Case | oh-my-opencode | GitHub Agentic Workflows | Winner |
-|----------|----------------|-------------------------|--------|
-| **Local development** | ⭐⭐⭐⭐⭐ | ⭐ | oh-my-opencode |
-| **Code refactoring** | ⭐⭐⭐⭐⭐ | ⭐⭐ | oh-my-opencode |
-| **Interactive debugging** | ⭐⭐⭐⭐⭐ | ⭐ | oh-my-opencode |
-| **Multi-component dev** | ⭐⭐⭐⭐⭐ | ⭐⭐ | oh-my-opencode |
-| **Issue automation** | ⭐⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **PR automation** | ⭐⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **Scheduled reports** | ⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **Security scanning** | ⭐⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **Team workflows** | ⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **Compliance/audit** | ⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **CI/CD integration** | ⭐⭐ | ⭐⭐⭐⭐⭐ | gh-aw |
-| **Long-running tasks** | ⭐⭐⭐⭐⭐ | ⭐⭐ | oh-my-opencode |
+| Use Case | oh-my-opencode | GitHub Agentic Workflows | Better suited |
+|----------|----------------|-------------------------|---------------|
+| **Local development** | High | Minimal | oh-my-opencode |
+| **Code refactoring** | High | Low | oh-my-opencode |
+| **Interactive debugging** | High | Minimal | oh-my-opencode |
+| **Multi-component dev** | High | Low | oh-my-opencode |
+| **Issue automation** | Low | High | gh-aw |
+| **PR automation** | Low | High | gh-aw |
+| **Scheduled reports** | Minimal | High | gh-aw |
+| **Security scanning** | Low | High | gh-aw |
+| **Team workflows** | Minimal | High | gh-aw |
+| **Compliance/audit** | Minimal | High | gh-aw |
+| **CI/CD integration** | Low | High | gh-aw |
+| **Long-running tasks** | High | Low | oh-my-opencode |
 
 ---
 

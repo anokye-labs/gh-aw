@@ -883,7 +883,7 @@ The 🎭 emoji consistently marks preview mode across all safe output types, ena
 
 ## Message Module Architecture
 
-The message system is split into modular files for better maintainability and to reduce JavaScript bundle bloat:
+The message system is split into modular files to reduce JavaScript bundle size:
 
 ### Module Structure
 
