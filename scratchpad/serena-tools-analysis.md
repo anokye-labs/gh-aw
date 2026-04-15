@@ -1,4 +1,4 @@
-# Serena Tools Usage - Deep Statistical Analysis
+# Serena Tools Usage - Statistical Analysis
 
 **Workflow Run:** [21560089409](https://github.com/github/gh-aw/actions/runs/21560089409/job/62122702303#step:33:1)  
 **Workflow:** Sergo - Serena Go Expert  
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-This report provides a comprehensive statistical analysis of Serena MCP (Model Context Protocol) server tool usage in the Sergo workflow execution. The analysis reveals tool adoption patterns, request/response metrics, and identifies optimization opportunities.
+This report provides a statistical analysis of Serena MCP (Model Context Protocol) server tool usage in the Sergo workflow execution. The analysis reveals tool adoption patterns, request/response metrics, and identifies optimization opportunities.
 
 ### Key Findings
 
@@ -430,4 +430,4 @@ sequenceDiagram
 
 **Generated:** 2026-02-01T10:03:47.321901  
 **Data Source:** Workflow run 21560089409, job 62122702303  
-**Analysis Script:** `/tmp/comprehensive_analysis.py`
+**Analysis Script:** `/tmp/analysis.py`
