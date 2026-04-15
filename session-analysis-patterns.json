@@ -1,0 +1,58 @@
+{
+  "patterns": [
+    {
+      "type": "data-fetch-gap",
+      "description": "sessions-list.json returns empty array despite active agentic PR creation. The copilot-session-data-fetch module is not populating session metadata.",
+      "first_observed": "2026-04-13",
+      "last_observed": "2026-04-15",
+      "frequency": 3,
+      "correlation_with_success": null,
+      "notes": "Workaround: use GitHub PR API as indirect session proxy."
+    },
+    {
+      "type": "docs-workflow-daily-pairing",
+      "description": "docs-consolidator and instructions-janitor workflows run as daily pairs, each producing one PR per day.",
+      "first_observed": "2026-04-13",
+      "last_observed": "2026-04-15",
+      "frequency": 3,
+      "correlation_with_success": "positive"
+    },
+    {
+      "type": "draft-pr-gating",
+      "description": "docs-unbloat workflow consistently creates draft PRs, suggesting intentional human-review gate before merge.",
+      "first_observed": "2026-04-13",
+      "last_observed": "2026-04-15",
+      "frequency": 3,
+      "correlation_with_success": "neutral"
+    },
+    {
+      "type": "tone-scan-incremental-deepening",
+      "description": "docs-tone-scan runs daily against the scratchpad and progressively finds more issues. Apr 13: 22 fixes; Apr 14: 1 fix (narrower scope); Apr 15: 24 fixes (full scope re-run). Scope varies per run \u2014 sometimes targeted, sometimes comprehensive.",
+      "first_observed": "2026-04-13",
+      "last_observed": "2026-04-15",
+      "frequency": 3,
+      "correlation_with_success": "positive",
+      "notes": "Agent explicitly references prior PRs (#8 and #13) and marks them as superseded in the PR body."
+    },
+    {
+      "type": "network-isolation-detection",
+      "description": "docs-unbloat detected Playwright unavailability due to network isolation in the container. Agent gracefully degraded: verified page via curl (HTTP 200) and noted screenshot limitation in PR body.",
+      "first_observed": "2026-04-15",
+      "last_observed": "2026-04-15",
+      "frequency": 1,
+      "correlation_with_success": "neutral",
+      "notes": "Agent does not fail on missing tooling; notes constraint and continues."
+    },
+    {
+      "type": "version-awareness",
+      "description": "instructions-janitor correctly detected a new release (v0.68.3 vs v0.68.1 from prior days) and updated documentation accordingly. Agent inspects codebase directly when release notes are unavailable.",
+      "first_observed": "2026-04-15",
+      "last_observed": "2026-04-15",
+      "frequency": 1,
+      "correlation_with_success": "positive",
+      "notes": "PR #17 documents that 'No documentation commits found \u2014 analysis based on release notes and direct code inspection'."
+    }
+  ],
+  "last_updated": "2026-04-15",
+  "version": "1.0"
+}

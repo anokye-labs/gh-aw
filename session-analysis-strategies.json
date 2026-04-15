@@ -1,0 +1,15 @@
+{
+  "strategies": [
+    {
+      "name": "workflow-type-clustering",
+      "description": "Group observed sessions by their workflow type (inferred from PR labels and branch names) to identify recurrence patterns, session volume per type, and cross-type performance differences.",
+      "first_used": "2026-04-14",
+      "run_id": 24398046512,
+      "effectiveness": "medium",
+      "findings": "4 distinct workflow types found. Docs-related workflows (docs-consolidator, instructions-janitor) run daily in pairs. train-drain3-weights runs daily. docs-unbloat appears triggered less frequently. go-logger is feature-driven (once).",
+      "recommendation": "keep"
+    }
+  ],
+  "last_updated": "2026-04-14",
+  "version": "1.0"
+}
