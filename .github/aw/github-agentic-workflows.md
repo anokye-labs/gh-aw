@@ -83,6 +83,8 @@ The generated `agentics-maintenance.yml` workflow supports these `workflow_dispa
 - `upgrade` — Upgrade gh-aw version and dependencies (opens a PR)
 - `safe_outputs` — Replay safe outputs from a previous run (provide `run_url`)
 - `create_labels` — Compile all workflows and create any labels referenced in `safe-outputs` that are missing from the repository
+- `validate` — Compile all workflows and validate them without emitting `.lock.yml` files (equivalent to `gh aw compile --no-emit`)
+- `cleanup-cache-memory` — Delete stale GitHub Actions cache entries for cache-memory configurations across all workflows
 
 ## Complete Frontmatter Schema
 
@@ -1433,7 +1435,9 @@ The YAML frontmatter supports these fields:
       - `enabled:` - Enable/disable threat detection (boolean, default: `true`)
       - `prompt:` - Additional instructions appended to threat detection analysis (string)
       - `engine:` - AI engine for threat detection (engine config or `false` to disable AI detection)
-      - `steps:` - Extra job steps to run after detection (array)
+      - `steps:` - Extra job steps to run before engine execution (array)
+      - `post-steps:` - Extra job steps to run after engine execution (array)
+      - `runs-on:` - Runner override for the detection job (string)
     - Example to disable AI-based detection (use custom steps only):
 
       ```yaml
@@ -1772,6 +1776,8 @@ on:
 - `pull_request_comment` - Comments on pull requests only (excludes issue comments)
 - `pull_request` - Pull request bodies (opened, edited, reopened)
 - `pull_request_review_comment` - Pull request review comments
+- `discussion` - Discussion bodies (created, edited)
+- `discussion_comment` - Comments on discussions
 - `*` - All comment-related events (default)
 
 **Note**: Both `issue_comment` and `pull_request_comment` map to GitHub Actions' `issue_comment` event with automatic filtering to distinguish between issue and PR comments.
