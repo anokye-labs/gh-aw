@@ -69,13 +69,16 @@ jobs:
           echo "Testing MCP inspection help..."
           ./gh-aw mcp inspect --help
 
-      - name: Recompile all workflows
+      - name: Compile newly added workflows
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Recompiling all installed workflows..."
-          make recompile
-          echo "Successfully recompiled all workflows"
+          echo "Compiling workflows added from githubnext/agentics..."
+          for workflow in weekly-research ci-doctor issue-triage; do
+            echo "Compiling ${workflow}..."
+            ./gh-aw compile ".github/workflows/${workflow}.md"
+          done
+          echo "Successfully compiled added workflows"
 
       - name: Check for compilation artifacts
         run: |

@@ -16,6 +16,16 @@
     },
     "codespaces": {
       "repositories": {
+        "anokye-labs/gh-aw": {
+          "permissions": {
+            "actions": "write",
+            "contents": "write",
+            "discussions": "read",
+            "issues": "read",
+            "pull-requests": "write",
+            "workflows": "write"
+          }
+        },
         "github/gh-aw": {
           "permissions": {
             "actions": "write",
